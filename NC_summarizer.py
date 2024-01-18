@@ -1,25 +1,29 @@
-# This script summarizes the classification data from NanoCLUST output files to .csv format
+"""
+This script combines taxonomic classification results of multiple NanoCLUST runs into 1 CSV file.
+"""
+
 import os
 import csv
 import argparse
+from rich import print as rprint
 
 def process_directory(input_directory, output_file, taxonomic_level):
     """
-    Function to check input, read files, and create a summary.
+    Checks input directory, reads NanoCLUST output files, and creates a summary CSV file.
 
     Parameters:
     input_directory (str): The path to the input directory.
-    output_file (str): The path to the output file.
+    output_file (str): The path to the output CSV file.
     taxonomic_level (str): The taxonomic level to consider.
 
     Raises:
     FileNotFoundError: If the input directory does not exist or if the expected input file does not exist.
     FileExistsError: If the output file already exists.
     """
-    # Check if specified input_directory exists, exit if it doesn't
+    # Check if specified input_directory exists, notify and exit if it doesn't
     if not os.path.exists(input_directory):
         raise FileNotFoundError(f'The input directory {input_directory} does not exist.')    
-    # Check if specified output_file exists, exit if it does (don't want to overwrite)
+    # Check if specified output_file exists, notify and exit if it does (don't want to overwrite)
     if os.path.exists(output_file):
         raise FileExistsError(f'The output file {output_file} already exists.')
 
@@ -31,6 +35,7 @@ def process_directory(input_directory, output_file, taxonomic_level):
     # Open the output summary.csv file for writing
     with open(output_file, 'w', newline='') as output_file:
         output_csv = csv.writer(output_file)
+        # Write header
         output_csv.writerow(["runname", "taxid", "rel_abundance"])
         
         # Loop through the subdirectories
@@ -42,15 +47,16 @@ def process_directory(input_directory, output_file, taxonomic_level):
             name = str(namelist[0])
             # Check if it's a directory
             if os.path.isdir(subdir_path):
+                # Create specific input file path, with taxonomic level and name
                 input_file_path = os.path.join(subdir_path, f"{name}", f"rel_abundance_{name}_{tax}.csv")
                 
-                # Check if input file path exists, error and exit otherwise
+                # Check if input file path exists, notify and exit otherwise
                 if not os.path.exists(input_file_path):
                     error_message = (f"\nExpected a file named {input_file_path}. "
                      "Make sure that the input directory you specified contains the direct output directories from NanoCLUST, "
                      "with the classification data output in a folder with the same name as your run.\n")
                     
-                    # Clean up 
+                    # Clean up if error occured
                     os.remove(output_file.name)
 
                     # Raise error
@@ -63,6 +69,7 @@ def process_directory(input_directory, output_file, taxonomic_level):
                     # Open .csv file to read
                     with open(input_file_path, 'r') as input_file:
                         input_csv = csv.reader(input_file)
+                        # Skip header
                         next(input_csv)
 
                         # Extract abundance information
@@ -76,7 +83,7 @@ def process_directory(input_directory, output_file, taxonomic_level):
 # Function to create variables for possible taxonomic levels
 def taxonomic_code(taxonomic_level):
     """
-    Returns the taxonomic code for the given taxonomic level.
+    Returns the taxonomic 1 letter code for the given taxonomic level.
 
     Parameters:
     taxonomic_level (str): The taxonomic level ('species', 'genus', 'family', 'order').
@@ -98,16 +105,35 @@ def main():
     """
     Entry point of the NanoCLUST results summarizer program.
     
-    This function parses command line arguments, creates an argparse object, and calls the `process_directory` function
+    Prints the logo, parses command line arguments, creates an argparse object, and calls the `process_directory` function
     to summarize the NanoCLUST taxonomic classification results from multiple runs.
     """
+    title = ("""
+         _   _                    ____ _    _   _ ____ _____ 
+        | \ | | __ _ _ __   ___  / ___| |  | | | / ___|_   _|
+        |  \| |/ _` | '_ \ / _ \| |   | |  | | | \___ \ | |  
+        | |\  | (_| | | | | (_) | |___| |__| |_| |___) || |  
+        |_| \_|\__,_|_| |_|\___/ \____|_____\___/|____/ |_|                                                                         
+            """)
+    titleSUMMARIZER= ("""
+     ____  _   _ __  __ __  __    _    ____  ___ __________ ____  
+    / ___|| | | |  \/  |  \/  |  / \  |  _ \|_ _|__  / ____|  _ \ 
+    \___ \| | | | |\/| | |\/| | / _ \ | |_) || |  / /|  _| | |_) |
+     ___) | |_| | |  | | |  | |/ ___ \|  _ < | | / /_| |___|  _ < 
+    |____/ \___/|_|  |_|_|  |_/_/   \_\_| \_\___/____|_____|_| \_\\
+                    """)
+    
+    # Print pretty ASCII logo and explanation to script
+    rprint(f"\n[yellow]Welcome to[/yellow]")
+    rprint(f'[green]{title}[magenta]{titleSUMMARIZER}[/green]')
+    rprint(f'[blue]This program combines taxonomic classification results of multiple NanoCLUST runs into 1 CSV file.[/blue]\n') 
     
     # Create argparse thingy
     parser = argparse.ArgumentParser(
         prog='NanoCLUST results summarizer',
-        description='This program summarizes the NanoCLUST taxonomic classification results from multiple runs',
+        description='This program combines taxonomic classification results of multiple NanoCLUST runs into 1 CSV file.',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        epilog='Thanks for using this tool!'
+        epilog='Thanks for using this script!'
     )
     
     # Add arguments to parser
