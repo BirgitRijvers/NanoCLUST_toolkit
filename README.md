@@ -4,6 +4,12 @@ Programs that enhance [NanoCLUST](https://github.com/genomicsITER/NanoCLUST) usa
 ### Scripts included
 - NC_runner.py
 - NC_summarizer.py
+**To be included**
+- gridsearch.py (run NanoCLUST on (almost) all combinations of specified parameters)
+- summary_to_phyloseq.py (create OTU and TAX files for phyloseq based on CSV summary)
+- phyloseqize.py (create OTU and TAX files for phyloseq based directly on NanoCLUST output (no summary needed) (combine with summary_to_phyloseq.py?))
+- NC_cluster_concat.py (concatenate cluster consensus sequences from multiple NanoCLUST runs into .fasta file)
+- concat_fastqgz.py (recursively concatenate .fastq.gz files in a directory into separate .fastq files) (needed to run NanoCLUST) (combine with NC_runner.py?))
 
 ## NC_runner.py
 <img width="600" alt="image" src="https://github.com/BirgitRijvers/NanoCLUST_runner/assets/126883391/acb76a00-2832-4ebd-98f6-c0f55e605051">
