@@ -1,3 +1,7 @@
+"""
+This script starts separate NanoCLUST runs for all .fastq files in a directory specified by the user.
+"""
+
 import os
 import subprocess
 import argparse
@@ -5,11 +9,26 @@ from rich import print as rprint
 
 # Function to run
 def run_nanoclust(input_file, output_directory, nanoclust_path, database, tax_database):
+    """
+    Run NanoCLUST on a specified input file.
+
+    Parameters:
+    input_file (str): Path to the input .fastq file.
+    output_directory (str): Path to the output directory.
+    nanoclust_path (str): Path to the NanoCLUST main.nf file.
+    database (str): Path to the database file.
+    tax_database (str): Path to the taxonomic database file.
+    """
     command = f"nextflow run {nanoclust_path} -profile docker --reads {input_file} --db {database} --taxdb {tax_database} --outdir {output_directory}"
     rprint(f"[green]Starting NanoCLUST for {input_file}...[/green]")
     subprocess.run(command, shell=True)
 
 def main():
+    """
+    Main function to run the script.
+    """
+    
+    # Create ASCII title variables
     title = ("""
      _  _                    ___  _    _   _  ___  _____ 
     | \| | __ _  _ _   ___  / __|| |  | | | |/ __||_   _|
@@ -27,6 +46,7 @@ def main():
     rprint(f"\n[yellow]Welcome to[/yellow]")
     rprint(f'[green]{title}[magenta]{titleRUNNER}[/green]')
     rprint(f'[blue]This script runs NanoCLUST on files in a directory you specify.[/blue]\n')        
+    
     # Create argumentparser
     parser = argparse.ArgumentParser(
         prog='NanoCLUST runner on directory',
@@ -57,12 +77,12 @@ def main():
     # Parse!
     args = parser.parse_args()
 
-    # Check if specified input_directory exists, exit if it doesn't
+    # Check if specified input_directory exists, notify and exit if it doesn't
     if not os.path.exists(args.input_directory):
         rprint(f'[red]Error: The input directory {args.input_directory} does not exist.[/red]')
         exit(1)
 
-    # Check if specified output_directory exists, create it if it doesn't
+    # Check if specified output_directory exists, notify and create it if it doesn't
     if not os.path.exists(args.output_directory):
         os.mkdir(args.output_directory)
         rprint(f'[dark_orange]The output directory {args.output_directory} did not exist, but now it does [/dark_orange][green] :)[/green]\n')
@@ -74,7 +94,7 @@ def main():
     # Loop through the files
     for filename in fastqfiles:
 
-        # Run NanoCLUST on each file
+        # Run NanoCLUST on each file with function
         run_nanoclust(
             os.path.join(args.input_directory, filename),
             os.path.join(args.output_directory, filename),
