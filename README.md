@@ -1,14 +1,14 @@
 # NanoCLUST toolkit
-Programs that enhance NanoCLUST usage and output.
+Programs that enhance [NanoCLUST](https://github.com/genomicsITER/NanoCLUST) usage and output.
 
-## Scripts included
+### Scripts included
 - NC_runner.py
+- NC_summarizer.py
 
 ## NC_runner.py
 <img width="600" alt="image" src="https://github.com/BirgitRijvers/NanoCLUST_runner/assets/126883391/acb76a00-2832-4ebd-98f6-c0f55e605051">
 
-### Introduction
-The [NC_runner.py](https://github.com/BirgitRijvers/NanoCLUST_toolkit/blob/main/NC_runner.py) script streamlines the execution of [NanoCLUST](https://github.com/genomicsITER/NanoCLUST) on multiple files within a directory using just one command. 
+The [NC_runner.py](https://github.com/BirgitRijvers/NanoCLUST_toolkit/blob/main/NC_runner.py) script streamlines the execution of NanoCLUST on multiple files within a directory using just one command. 
 
 This script is useful when dealing with multiple fastq files, when the approach of using wildcards to select multiple input files does not work. 
 
@@ -32,8 +32,39 @@ Basic command, only input directory specified (default settings):
 ```bash
 python NC_runner.py sequencedata 
 ```
-
 Input and output directory, file suffix, main.nf path, database paths specified
 ```bash
 python NC_runner.py sequencedata -o NanoCLUST_out -s .fastq.gz -n project1/programs/NanoCLUST/main.nf -d project1/db/16S_ribosomal_RNA -t project1/db/taxdb
 ```
+Getting help
+```bash
+python NC_runner.py -h
+```
+## NC_summarizer.py
+The [NC_summarizer.py](https://github.com/BirgitRijvers/NanoCLUST_toolkit/blob/main/NC_summarizer.py) script facilitates the concatenation of taxonomic classification results from multiple NanoCLUST runs into a single CSV file. Users can specify the taxonomic level from which the results should be concatenated.
+
+This script is useful when comparing taxonomic classification results across multiple NanoCLUST runs. Barplots containing relative abundances across samples can be easily created based on the generated CSV.
+
+## Usage
+1. Download the [NC_summarizer.py](https://github.com/BirgitRijvers/NanoCLUST_runner/blob/main/NC_summarizer.py) script to a convenient location, preferably your home directory to minimize path-related errors.
+2. *(Optional)* Modify the default output directory location in the argparse section of the script.
+3. *(Optional)* Modify the default taxonomic level in the argparse section of the script.
+4. Execute the script!
+
+## Output
+The program generates a single CSV file with three columns: "runname," "taxid," and "rel_abundance." The "runname" column contains the NanoCLUST run name for all taxonomic IDs detected by NanoCLUST, listed in the "taxid" column. The "rel_abundance" column contains the relative abundance of the noted taxid for that run.
+
+### Example commands
+Basic command, only input directory specified (default settings):
+```bash
+python NC_summarizer.py NanoCLUST_out
+```
+Input directory, output file location and taxonomic level specified
+```bash
+python NC_summarizer.py NanoCLUST_out -o NanoCLUST_out/NCsummary.csv -l species
+```
+Getting help
+```bash
+python NC_summarizer.py -h
+```
+
