@@ -1,5 +1,5 @@
 # NanoCLUST toolkit
-Programs that enhance [NanoCLUST](https://github.com/genomicsITER/NanoCLUST) usage and output.
+Programs that enhance [NanoCLUST](https://github.com/genomicsITER/NanoCLUST) V1.0dev usage and output.
 
 ### Scripts included
 - NC_runner.py
