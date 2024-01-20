@@ -48,6 +48,8 @@ Getting help
 python NC_runner.py -h
 ```
 ## NC_summarizer.py
+<img width="592" alt="image" src="https://github.com/BirgitRijvers/NanoCLUST_toolkit/assets/126883391/3751d3d0-adee-44f9-ba33-f7212d9a5383">
+
 The [NC_summarizer.py](https://github.com/BirgitRijvers/NanoCLUST_toolkit/blob/main/NC_summarizer.py) script facilitates the concatenation of taxonomic classification results from multiple NanoCLUST runs into a single CSV file. Users can specify the taxonomic level from which the results should be concatenated.
 
 This script is useful when comparing taxonomic classification results across multiple NanoCLUST runs. Barplots containing relative abundances across samples can be easily created based on the generated CSV.
